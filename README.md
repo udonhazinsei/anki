@@ -1,5 +1,5 @@
 # このプログラムについて
-[Anki](https://apps.ankiweb.net)の単語ファイルに画像を追加するやつです
+[Anki](https://apps.ankiweb.net)の単語ファイルに画像を追加するやつです<br>
 Pythonとseleniumの導入説明は検索してください...（そのうち書くかも）
 
 # 動作確認済み環境
