@@ -21,9 +21,9 @@ parser.add_argument("-p", "--prefix", help="ファイル名の頭につける文
 parser.add_argument("-r", "--imgratio", help="画像の拡大率（anki上での大きさ）", type=float, default=1)
 args = parser.parse_args()
 
-#? test
 window_w, window_h = map(int, args.imgsize.split("x"))
 img_ratio = args.imgratio
+output_dir = glob.glob(args.outputdir)[0]
 
 
 # seleniumの設定
@@ -40,10 +40,11 @@ if not os.path.isdir("./output"):
 
 # 同じ階層にある.txtファイル取得
 anki_files = glob.glob("./*.txt")
+files_len = len(anki_files)
 
 # ankiファイル1個ずつ処理
-for anki_file in anki_files:
-    print(f"{anki_file} を処理中...")
+for file_cnt,anki_file in enumerate(anki_files):
+    # prefix
     if args.prefix:
         prefix = args.prefix + "--"
     else:
@@ -51,15 +52,22 @@ for anki_file in anki_files:
 
     # ファイル読み込み
     with open(anki_file) as f:
-        output_lines = []
         lines = f.readlines()
         lines_len = len(lines)
 
-    # 1行ずつ処理
-    for cnt,line in enumerate(lines):
+    output_lines = []
 
-        # コメントの行は無視
-        if not line[0] == "#":
+    # Log
+    print(f"{anki_file} を処理中...（{file_cnt+1} / {files_len}）")
+
+    # 1行ずつ処理
+    for line_cnt,line in enumerate(lines):
+        # コメントの行・改行のみの行は無視
+        if line[0] == "#":
+            output_lines.append(line.replace("#html:false", "#html:true"))
+        elif line == "\n":
+            pass
+        else:
             column = line.replace("\n","").split("\t")
             search_word = column[args.searchcolumn - 1]
 
@@ -83,7 +91,7 @@ document.querySelector("#fbpgbt").remove();
             img_name = prefix + search_word + "-" + word_uuid
 
             # スクショ
-            driver.save_screenshot(glob.glob(args.outputdir)[0]+"/"+img_name+".png")
+            driver.save_screenshot(output_dir+"/"+img_name+".png")
 
             # 1秒待つ（短い期間にアクセスしすぎるとよくない）
             sleep(1)
@@ -92,20 +100,15 @@ document.querySelector("#fbpgbt").remove();
 width=""{int(window_w*img_ratio)}"" height=""{int(window_h*img_ratio)}"">"\n'
             output_lines.append(output_line)
 
-        else:
-            output_lines.append(line.replace("#html:false", "#html:true"))
-
         # 進捗表示
-        progress = int(((cnt+1)/lines_len)*50)
-        progress_per = "{:.1f}".format(((cnt+1)/lines_len)*100)
-        print("\r{}%  {}".format(progress_per, "#"*progress), end="")
+        progress = int(((line_cnt+1)/lines_len)*50)
+        progress_per = "{:.1f}".format(((line_cnt+1)/lines_len)*100)
+        print("\r{}%（{} / {}）  {}".format(progress_per, line_cnt+1, lines_len, "#"*progress), end="")
 
-    # outputファイル生成
+    # 書き込み
     output_file_name = "./output/"+os.path.basename(anki_file)
-    #TODO これ先の方でやっといて
     if os.path.isfile(output_file_name):
         os.remove(output_file_name)
-    #TODO これmode="a"にする
     with open(output_file_name, "x") as f:
         f.writelines(output_lines)
 
