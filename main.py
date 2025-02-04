@@ -10,15 +10,14 @@ from selenium.webdriver.support import expected_conditions as EC
 
 
 # コマンドライン引数関係
-parser = argparse.ArgumentParser(description="ankiファイルに画像を追加するやつ")
+parser = argparse.ArgumentParser()
 parser.add_argument("--show", action="store_true")
-parser.add_argument("-s", "--imgsize", help="画像サイズ（大きくすると含まれる画像の数が増える, 「x」区切りで）",
-                    type=str, default="700x700")
-parser.add_argument("-d", "--outputdir", help="画像ファイルの出力先ディレクトリ", type=str,
+parser.add_argument("-s", "--imgsize", type=str, default="700x700")
+parser.add_argument("-d", "--outputdir", type=str,
                     default="/Users/*/Library/Application Support/Anki2/*/collection.media")
-parser.add_argument("-c", "--searchcolumn", help="検索する列（クイズの問題集とかだったら2がいいと思う）",type=int, default=1)
-parser.add_argument("-p", "--prefix", help="ファイル名の頭につける文字列（デフォルトはファイル名）", type=str)
-parser.add_argument("-r", "--imgratio", help="画像の拡大率（anki上での大きさ）", type=float, default=1)
+parser.add_argument("-c", "--searchcolumn",type=int, default=1)
+parser.add_argument("-p", "--prefix", type=str)
+parser.add_argument("-r", "--imgratio", type=float, default=1)
 args = parser.parse_args()
 
 window_w, window_h = map(int, args.imgsize.split("x"))
