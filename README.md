@@ -43,7 +43,7 @@ python main.py
 ```python main.py```のあとに引数を指定できます（全部オプション）<br>
 例：
 ```
-python main.py --show -s 500x500 -d /Users/*/Desktop -c 2 -p abc -r 0.5
+python main.py --show -s 500x500 -d /Users/*/Desktop/test -c 2 -p abc -r 0.5
 ```
 - ```--show```：この引数が存在する場合、自動操作中のChromeのウィンドウを表示する（見てると楽しいかもだけど普通は邪魔だと思うから指定しないほうがいいよ）
 - ```-s 500x500```：画像のサイズを横×縦で指定（「x（小文字のエックス）」で区切ってください） 大きくすると含まれる画像の数が増える この例の場合だと500×500の範囲の画像になる
