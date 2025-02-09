@@ -23,6 +23,7 @@ python -V
 
 ## 実行準備
 Pythonとseleniumを導入する
+Ankiで画像を追加したいデッキをエクスポートする（ファイルの形式を「テキストファイル形式のノート(.txt)にする」,それ以外はデフォルトのままでOK）
 1. [github](https://github.com/udonhazinsei/anki)開いて緑色の「Code」ボタンを押して一番下の「Download Zip」を押す
 1. ダウンロードしたzipファイルを解凍
 1. 解凍してできた「anki-main」フォルダをデスクトップに移動
